@@ -16,11 +16,12 @@
                         @item.Quantity
                         <span class="visually-hidden">items in cart</span>
                     </span>
+
                     <label>Product</label>
                     <input class="form-control" value="@item.Product.Name" readonly />
 
                     <label>Price</label>
-                    <input class="form-control" value="@item.Product.Price.ToString("C")" readonly />
+                    <input class="form-control" value="@item.Product.Price.ToString("c", System.Globalization.CultureInfo.GetCultureInfo("de-DE"))" readonly />
 
                     <input type="hidden" name="CartItems[@index].ProductId" value="@item.ProductId" />
                     <input type="hidden" name="CartItems[@index].Quantity" value="@item.Quantity" />
@@ -31,7 +32,7 @@
     </div>
 
     <div class="text-end mt-3">
-        <h5>Total Price: <span class="badge bg-success">@Model.TotalPrice.ToString("C")</span></h5>
+        <h5>Total Price: <span class="badge bg-success">@Model.TotalPrice.ToString("c", System.Globalization.CultureInfo.GetCultureInfo("de-DE"))</span></h5>
     </div>
 
     <hr />

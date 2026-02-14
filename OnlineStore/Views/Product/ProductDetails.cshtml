@@ -1,25 +1,27 @@
 ﻿@model OnlineStore.Data.Models.Product.GetProductViewModel
+@using OnlineStore.Services.Users
+@inject LoggedUserService loggedUserService
 
 <h2>Product Details</h2>
 
 <div class="d-flex flex-row">
 	<div id="carouselExample" class="carousel slide" style="width:100%">
-		<div class="carousel-indicators">
-			<button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-			<button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
-			<button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
-		  </div>
-	  <div class="carousel-inner">
-		<div class="carousel-item active">
-		  <img src="https://placehold.co/600x400" class="d-block w-100" alt="...">
+		<div class="carousel-inner">
+
+			@for(int i=0; i<Model.Images.Count; i++)
+			{
+				var image = Model.Images[i];
+
+				<div class="carousel-item @(i == 0 ? "active" : "")">
+					<img src="@image.Url" class="d-block w-100" alt="...">
+				</div>
+			}
+			@if (Model.Images.Count == 0){
+				<div class="carousel-item active">
+					<img src="https://placehold.co/600x400" class="d-block w-100" alt="...">
+				</div>
+			}
 		</div>
-		<div class="carousel-item">
-		  <img src="https://placehold.co/600x400" class="d-block w-100" alt="...">
-		</div>
-		<div class="carousel-item">
-		  <img src="https://placehold.co/600x400" class="d-block w-100" alt="...">
-		</div>
-	  </div>
 	  <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
 		<span class="carousel-control-prev-icon" aria-hidden="true"></span>
 		<span class="visually-hidden">Previous</span>
@@ -30,7 +32,7 @@
 	  </button>
 	</div>
 
-	<div class="card" style="margin:1em">
+	<div class="card" style="margin:1em; min-width: 24em">
 		<div class="card-body">
 			<div style="display: flex; flex-direction:row; width: 100%; justify-content:space-between; align-items: center">
 					<em class="small" style="color:gray">@Model.Category</em>
@@ -43,6 +45,16 @@
 				<a asp-action="AddToCart" asp-controller="ShoppingCart" asp-route-id="@Model.Id" metho  class="btn btn-primary me-1" style="width:100%">Add To Cart</a>
 				<a asp-action="All" asp-controller="Product" class="btn btn-outline-primary me-1" style="width:100%">Back</a>
 			</div>
+			@if (loggedUserService.IsAdmin)
+			{
+				<div class="alert alert-dark" style="margin-top:1em">
+					<p>Admin panel:</p>
+					<div class="btn-group" role="group">
+						<a asp-action="Edit" asp-controller="Product" asp-route-id="@Model.Id" class="btn btn-sm btn-outline-primary me-1">Edit</a>
+						<a asp-action="Delete" asp-controller="Product" asp-route-id="@Model.Id" class="btn btn-sm btn-outline-danger">Delete</a>
+					</div>
+				</div>
+			}
 		</div>
 
 	</div>
