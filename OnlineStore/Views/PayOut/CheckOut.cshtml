@@ -1,0 +1,69 @@
+﻿@model OnlineStore.Data.Models.PayOut.PayOutViewModel
+
+<h2>Confirm Your Order</h2>
+
+<form asp-action="CheckOut" method="post">
+    @{
+        var index = 0;
+    }
+
+    <div style="display:flex; flex-direction:row; flex-wrap:wrap; width: 100%; justify-content: center">
+        @foreach (var item in Model.CartItems)
+        {
+            <div class="card border rounded p-3 mb-3" style="width: 18em; margin: 0.5em;">
+                <div class="card-body">
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                        @item.Quantity
+                        <span class="visually-hidden">items in cart</span>
+                    </span>
+
+                    <label>Product</label>
+                    <input class="form-control" value="@item.Product.Name" readonly />
+
+                    <label>Price</label>
+                    <input class="form-control" value="@item.Product.Price.ToString("c", System.Globalization.CultureInfo.GetCultureInfo("de-DE"))" readonly />
+
+                    <input type="hidden" name="CartItems[@index].ProductId" value="@item.ProductId" />
+                    <input type="hidden" name="CartItems[@index].Quantity" value="@item.Quantity" />
+                </div>
+            </div>
+            index++;
+        }
+    </div>
+
+    <div class="text-end mt-3">
+        <h5>Total Price: <span class="badge bg-success">@Model.TotalPrice.ToString("c", System.Globalization.CultureInfo.GetCultureInfo("de-DE"))</span></h5>
+    </div>
+
+    <hr />
+
+    <h3>Shipping Information</h3>
+    <div class="form-group">
+        <label asp-for="FullName"></label>
+        <input asp-for="FullName" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="Address"></label>
+        <input asp-for="Address" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="Email"></label>
+        <input asp-for="Email" class="form-control" type="email" />
+    </div>
+
+    <h3>Payment Information</h3>
+    <div class="form-group">
+        <label asp-for="CardNumber"></label>
+        <input asp-for="CardNumber" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="Expiration"></label>
+        <input asp-for="Expiration" class="form-control" placeholder="MM/YY" />
+    </div>
+    <div class="form-group">
+        <label asp-for="CVV"></label>
+        <input asp-for="CVV" class="form-control" />
+    </div>
+
+    <button type="submit" class="btn btn-success mt-3">Place Order</button>
+</form>
